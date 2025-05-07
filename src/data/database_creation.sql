@@ -18,7 +18,8 @@ CREATE TABLE Usuario (
                          contrasena VARCHAR(255) NOT NULL,
                          rol ENUM('cliente', 'administrador') DEFAULT 'cliente',
                          fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                         esta_activo BOOLEAN DEFAULT TRUE
+                         esta_activo BOOLEAN DEFAULT TRUE,
+                         intentos INT NOT NULL DEFAULT 0
 );
 
 -- Tabla: Producto
