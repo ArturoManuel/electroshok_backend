@@ -1,51 +1,35 @@
 import pool from "../config/db.js";
+import { UsuarioModel } from "../models/usuario.model.js";
 
-export const getUsuarioByCorreo = (credenciales) => {
-  // Para el login
-  const query = `SELECT * FROM Usuario WHERE correo_electronico = ?`;
-
-  return new Promise((resolve, reject) => {
-    pool.query(
-      query,
-      [credenciales.correo_electronico],
-      (error, results, fields) => {
-        if (error) reject(error);
-        else resolve(results);
-      }
-    );
-  });
+const login = async (credenciales) => {
+  const results = await UsuarioModel.login(credenciales);
+  return results;
 };
 
-export const block = (id_usuario) => {
-  // Es igual que el servicio de delete usuario
-  const query = `UPDATE Usuario SET esta_activo=0 WHERE id_usuario=?`;
-
-  return new Promise((resolve, reject) => {
-    pool.query(query, [id_usuario], (error, results, fields) => {
-      if (error) reject(error);
-      else resolve(results);
-    });
-  });
+export const getUsuarioById = async (id_usuario) => {
+  const results = await UsuarioModel.findById(id_usuario);
+  return results;
 };
 
-export const unblock = (id_usuario) => {
-  const query = `UPDATE Usuario SET esta_activo=1 WHERE id_usuario=?`;
-
-  return new Promise((resolve, reject) => {
-    pool.query(query, [id_usuario], (error, results, fields) => {
-      if (error) reject(error);
-      else resolve(results);
-    });
-  });
+export const block = async (id_usuario) => {
+  const results = await UsuarioModel.block(id_usuario);
+  return results;
 };
 
-export const updateIntentos = (id_usuario) => {
-  const query = `UPDATE Usuario SET intentos=intentos+1 WHERE id_usuario=?`;
+export const unblock = async (id_usuario) => {
+  const results = await UsuarioModel.unblock(id_usuario);
+  return results;
+};
 
-  return new Promise((resolve, reject) => {
-    pool.query(query, [id_usuario], (error, results, fields) => {
-      if (error) reject(error);
-      else resolve(results);
-    });
-  });
+export const updateIntentos = async (id_usuario, numIntentos) => {
+  const results = await UsuarioModel.updateIntentos(id_usuario, numIntentos);
+  return results;
+};
+
+export const SeguridadServices = {
+  login,
+  getUsuarioById,
+  unblock,
+  block,
+  updateIntentos,
 };
