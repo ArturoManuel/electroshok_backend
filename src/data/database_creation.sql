@@ -49,10 +49,10 @@ CREATE TABLE CarritoItem (
 -- Tabla: Pedido
 CREATE TABLE Pedido (
                         id_pedido INT PRIMARY KEY AUTO_INCREMENT,
-                        fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         id_usuario INT NOT NULL,
                         total DECIMAL(10, 2) NOT NULL,
                         estado ENUM('pendiente', 'pagado', 'cancelado') DEFAULT 'pendiente',
+                        fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
 );

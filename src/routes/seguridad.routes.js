@@ -1,5 +1,5 @@
 import express from "express";
-import * as SeguridadController from "../controllers/seguridad.controller.js";
+import { SeguridadController } from "../controllers/seguridad.controller.js";
 
 const router = express.Router();
 

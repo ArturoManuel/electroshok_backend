@@ -1,75 +1,87 @@
-import * as UsuarioServices from "../services/usuario.services.js";
+import { UsuarioServices } from "../services/usuario.services.js";
 
-export const getAll = (req, res) => {
+const getAll = async (req, res) => {
   console.log(`Sending all users`);
-  UsuarioServices.getAll()
-    .then((results) => {
-      res.json(results || []);
-    })
-    .catch((error) => {
-      res.status(500).json({
-        message: "Error al obtener usuarios",
-        error: error.toString(),
-      });
+  try {
+    const results = await UsuarioServices.getAll();
+    res.json(results || []);
+  } catch (error) {
+    console.log("Error in get all users");
+    res.status(500).json({
+      message: "Error al obtener usuarios",
+      error: error.toString(),
     });
+  }
 };
 
-export const getById = (req, res) => {
+const getById = async (req, res) => {
   console.log(`Sending user with id ${req.params.id}`);
-  const id_usuario = req.params.id;
-  UsuarioServices.getById(id_usuario)
-    .then((results) => {
-      res.json(results[0] || {});
-    })
-    .catch((error) => {
-      res.status(500).json({
-        message: `Error al obtener usuario con id: ${req.params.id}`,
-        error: error.toString(),
-      });
+  try {
+    const id_usuario = req.params.id;
+    const results = await UsuarioServices.getById(id_usuario);
+    res.json(results[0] || {});
+  } catch (error) {
+    console.log("Error in get user by id");
+    res.status(500).json({
+      message: `Error al obtener usuario con id: ${req.params.id}`,
+      error: error.toString(),
     });
+  }
 };
 
-export const create = (req, res) => {
+const create = async (req, res) => {
   console.log(`Creating user `, req.body);
-  const usuario = req.body;
-  UsuarioServices.create(usuario)
-    .then((resultado) => {
-      res.status(201).json({ mensaje: "Usuario creado" });
-    })
-    .catch((error) => {
-      res
-        .status(500)
-        .json({ message: "Error al crear usuario", error: error.toString() });
-    });
+  try {
+    const usuario = req.body;
+    const createdId = await UsuarioServices.create(usuario);
+    res.status(201).json({ mensaje: "Usuario creado", id: createdId });
+  } catch (error) {
+    console.log("Error in create user");
+    res
+      .status(500)
+      .json({ message: "Error al crear usuario", error: error.toString() });
+  }
 };
 
-export const updateById = (req, res) => {
+const updateById = async (req, res) => {
   console.log(`Updating user `, req.params.id);
-  const id_usuario = req.params.id;
-  const usuario = req.body;
-  UsuarioServices.updateById(id_usuario, usuario)
-    .then((resultado) => {
-      res.status(201).json({ mensaje: "Usuario actualizado" });
-    })
-    .catch((error) => {
-      res.status(500).json({
-        message: "Error al actualizar usuario",
-        error: error.toString(),
-      });
+  try {
+    const id_usuario = req.params.id;
+    const usuario = req.body;
+    const updatedRows = await UsuarioServices.updateById(id_usuario, usuario);
+    res
+      .status(201)
+      .json({ mensaje: "Usuario actualizado", updatedRows: updatedRows });
+  } catch (error) {
+    console.log("Error in update user");
+    res.status(500).json({
+      message: "Error al actualizar usuario",
+      error: error.toString(),
     });
+  }
 };
 
-export const deleteById = (req, res) => {
+const deleteById = async (req, res) => {
   console.log(`Deleting user `, req.params.id);
-  const id_usuario = req.params.id;
-  UsuarioServices.deleteById(id_usuario)
-    .then((resultado) => {
-      res.status(201).json({ mensaje: "Usuario eliminado" });
-    })
-    .catch((error) => {
-      res.status(500).json({
-        message: "Error al eliminar usuario",
-        error: error.toString(),
-      });
+  try {
+    const id_usuario = req.params.id;
+    const updatedRows = await UsuarioServices.deleteById(id_usuario);
+    res
+      .status(201)
+      .json({ mensaje: "Usuario eliminado", updatedRows: updatedRows });
+  } catch (error) {
+    console.log("Error in delete user");
+    res.status(500).json({
+      message: "Error al eliminar usuario",
+      error: error.toString(),
     });
+  }
+};
+
+export const UsuarioController = {
+  getAll,
+  getById,
+  create,
+  updateById,
+  deleteById,
 };

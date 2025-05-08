@@ -115,3 +115,10 @@ export const unblockUser = async (req, res) => {
     });
   }
 };
+
+export const SeguridadController = {
+  login,
+  refreshToken,
+  blockUser,
+  unblockUser,
+};

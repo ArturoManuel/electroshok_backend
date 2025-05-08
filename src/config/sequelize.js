@@ -1,4 +1,4 @@
-import Sequelize from "sequelize";
+import { Sequelize } from "sequelize";
 
 // Configuración de la conexión
 const orm = new Sequelize("electroshok", "root", "paltita99sql", {

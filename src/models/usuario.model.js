@@ -33,8 +33,7 @@ export const Usuario = orm.define(
       // },
     },
     rol: {
-      type: DataTypes.ENUM,
-      values: ["cliente", "administrador"],
+      type: DataTypes.ENUM("cliente", "administrador"),
       defaultValue: "cliente",
     },
     fecha_creacion: {
