@@ -7,7 +7,7 @@ CREATE TABLE Categoria (
                            nombre_categoria VARCHAR(100) NOT NULL,
                            tipo_categoria VARCHAR(100),
                            fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                           esta_activa BOOLEAN DEFAULT TRUE
+                           esta_activo BOOLEAN DEFAULT TRUE
 );
 
 -- Tabla: Usuario

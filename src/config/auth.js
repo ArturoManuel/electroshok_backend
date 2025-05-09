@@ -6,7 +6,7 @@ import {
   JWT_SECRET,
 } from "../utils/constants.js";
 
-export const generateToken = (user) => {
+const generateToken = (user) => {
   return jwt.sign(
     {
       id_usuario: user.id_usuario,
@@ -18,13 +18,13 @@ export const generateToken = (user) => {
   );
 };
 
-export const generateRefreshToken = function (user) {
+const generateRefreshToken = function (user) {
   return jwt.sign({ id_usuario: user.id_usuario }, JWT_REFRESH_SECRET, {
     expiresIn: JWT_REFRESH_EXPIRES,
   });
 };
 
-export const verifyToken = (token) => {
+const verifyToken = (token) => {
   try {
     return jwt.verify(token, JWT_SECRET);
   } catch (error) {
@@ -32,10 +32,17 @@ export const verifyToken = (token) => {
   }
 };
 
-export const verifyRefreshToken = function (token) {
+const verifyRefreshToken = function (token) {
   try {
     return jwt.verify(token, JWT_REFRESH_SECRET);
   } catch (error) {
     throw new Error("Token inválido o expirado");
   }
+};
+
+export const Auth = {
+  generateToken,
+  verifyToken,
+  generateRefreshToken,
+  verifyRefreshToken,
 };

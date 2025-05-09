@@ -72,22 +72,32 @@ const login = async (credenciales) => {
 };
 
 const findAll = async () => {
-  const results = await Usuario.findAll({
-    where: {
-      esta_activo: true,
-    },
-  });
-  return results.map((u) => u.toJSON());
+  try {
+    const results = await Usuario.findAll({
+      where: {
+        esta_activo: true,
+      },
+    });
+    return results.map((u) => u.toJSON());
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 const findById = async (id_usuario) => {
-  const results = await Usuario.findAll({
-    where: {
-      esta_activo: true,
-      id_usuario: id_usuario,
-    },
-  });
-  return results.map((u) => u.toJSON());
+  try {
+    const results = await Usuario.findAll({
+      where: {
+        esta_activo: true,
+        id_usuario: id_usuario,
+      },
+    });
+    return results.map((u) => u.toJSON());
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 const create = async (dataUsuario) => {

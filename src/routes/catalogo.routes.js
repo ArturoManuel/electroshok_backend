@@ -1,22 +1,18 @@
 import express from "express";
+import { authMiddleware } from "../middleware/auth.middleware.js";
 import * as CatalogoController from "../controllers/catalogo.controller.js";
-import * as MiddlewareAuth from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
 router.get("/", CatalogoController.getAll);
 router.get("/:id", CatalogoController.getWithId);
-router.post("/", MiddlewareAuth.authMiddleware(), CatalogoController.create);
+router.post("/", authMiddleware(), CatalogoController.create);
 router.put(
   "/:id",
   // MiddlewareAuth.authMiddleware(["admin"]),
-  MiddlewareAuth.authMiddleware(),
+  authMiddleware(),
   CatalogoController.updateById
 );
-router.delete(
-  "/:id",
-  MiddlewareAuth.authMiddleware(),
-  CatalogoController.deleteById
-);
+router.delete("/:id", authMiddleware(), CatalogoController.deleteById);
 
 export default router;

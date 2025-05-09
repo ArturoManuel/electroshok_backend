@@ -1,4 +1,4 @@
-import * as auth from "../config/auth.js";
+import { Auth } from "../config/auth.js";
 
 export const authMiddleware = function (roles = []) {
   return (req, res, next) => {
@@ -12,7 +12,7 @@ export const authMiddleware = function (roles = []) {
 
     try {
       const token = authHeader.split(" ")[1];
-      const decoded = auth.verifyToken(token);
+      const decoded = Auth.verifyToken(token);
       console.log(decoded);
       if (roles.length > 0 && !roles.includes(decoded.rol)) {
         return res.status(403).json({ error: "Permisos insuficientes" });

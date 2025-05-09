@@ -1,9 +1,5 @@
 import bcrypt from "bcrypt";
-import {
-  generateRefreshToken,
-  generateToken,
-  verifyRefreshToken,
-} from "../config/auth.js";
+import { Auth } from "../config/auth.js";
 import { SeguridadServices } from "../services/seguridad.services.js";
 import { UsuarioServices } from "../services/usuario.services.js";
 
@@ -32,8 +28,8 @@ export const login = async (req, res) => {
         numIntentos: numIntentos,
       });
     }
-    const userToken = generateToken(usuario);
-    const userRefreshToken = generateRefreshToken(usuario);
+    const userToken = Auth.generateToken(usuario);
+    const userRefreshToken = Auth.generateRefreshToken(usuario);
     res.json({
       mensaje: "Inicio de sesión exitoso",
       token: userToken,
@@ -56,7 +52,7 @@ export const refreshToken = async (req, res) => {
   }
 
   try {
-    const decoded = verifyRefreshToken(refreshToken);
+    const decoded = Auth.verifyRefreshToken(refreshToken);
     const usuarios = await UsuarioServices.getById(decoded.id_usuario);
     if (usuarios[0]) {
       //usuario validado
