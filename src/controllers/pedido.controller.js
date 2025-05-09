@@ -34,7 +34,7 @@ export const create = (req, res) => {
   const items = req.body.items;
   PedidoServices.create(id_usuario, items)
     .then((resultado) => {
-      res.status(201).json({ mensaje: "Pedido creado" });
+      res.status(201).json({ message: "Pedido creado" });
     })
     .catch((error) => {
       res
@@ -49,7 +49,7 @@ export const updateById = (req, res) => {
   const items = req.body;
   PedidoServices.updateById(id_pedido, items)
     .then((resultado) => {
-      res.json({ mensaje: "Pedido actualizado" });
+      res.json({ message: "Pedido actualizado" });
     })
     .catch((error) => {
       res.status(500).json({
@@ -64,7 +64,7 @@ export const deleteById = (req, res) => {
   const id_pedido = req.params.id;
   PedidoServices.deleteById(id_pedido)
     .then((resultado) => {
-      res.json({ mensaje: "Pedido eliminado" });
+      res.json({ message: "Pedido eliminado" });
     })
     .catch((error) => {
       res

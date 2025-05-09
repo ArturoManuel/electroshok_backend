@@ -34,7 +34,7 @@ const create = async (req, res) => {
   try {
     const usuario = req.body;
     const createdId = await UsuarioServices.create(usuario);
-    res.status(201).json({ mensaje: "Usuario creado", id: createdId });
+    res.status(201).json({ message: "Usuario creado", id: createdId });
   } catch (error) {
     console.log("Error in create user");
     res
@@ -51,7 +51,7 @@ const updateById = async (req, res) => {
     const updatedRows = await UsuarioServices.updateById(id_usuario, usuario);
     res
       .status(201)
-      .json({ mensaje: "Usuario actualizado", updatedRows: updatedRows });
+      .json({ message: "Usuario actualizado", updatedRows: updatedRows });
   } catch (error) {
     console.log("Error in update user");
     res.status(500).json({
@@ -68,7 +68,7 @@ const deleteById = async (req, res) => {
     const updatedRows = await UsuarioServices.deleteById(id_usuario);
     res
       .status(201)
-      .json({ mensaje: "Usuario eliminado", updatedRows: updatedRows });
+      .json({ message: "Usuario eliminado", updatedRows: updatedRows });
   } catch (error) {
     console.log("Error in delete user");
     res.status(500).json({

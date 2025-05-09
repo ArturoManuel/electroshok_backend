@@ -1,5 +1,6 @@
 import { DataTypes, Sequelize } from "sequelize";
 import orm from "../config/sequelize.js";
+import e from "cors";
 
 export const Usuario = orm.define(
   "usuario",
@@ -62,13 +63,18 @@ export const connect = async function () {
 };
 
 const login = async (credenciales) => {
-  const results = await Usuario.findAll({
-    where: {
-      esta_activo: true,
-      correo_electronico: credenciales.correo_electronico,
-    },
-  });
-  return results.map((u) => u.toJSON());
+  try {
+    const results = await Usuario.findAll({
+      where: {
+        esta_activo: true,
+        correo_electronico: credenciales.correo_electronico,
+      },
+    });
+    return results.map((u) => u.toJSON());
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 const findAll = async () => {

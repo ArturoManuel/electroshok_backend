@@ -9,7 +9,7 @@ export const login = async (req, res) => {
   try {
     const usuarios = await SeguridadServices.login(credenciales);
     if (usuarios.length === 0) {
-      return res.status(404).json({ mensaje: "Usuario no encontrado" });
+      return res.status(404).json({ message: "Usuario no encontrado" });
     }
     const usuario = usuarios[0];
     const esValida = await bcrypt.compare(
@@ -21,17 +21,17 @@ export const login = async (req, res) => {
       await SeguridadServices.updateIntentos(usuario.id_usuario, numIntentos);
       if (numIntentos >= 3) {
         await SeguridadServices.block(usuario.id_usuario);
-        return res.status(401).json({ mensaje: "Usuario bloqueado" });
+        return res.status(401).json({ message: "Usuario bloqueado" });
       }
       return res.status(401).json({
-        mensaje: "Contraseña incorrecta",
+        message: "Contraseña incorrecta",
         numIntentos: numIntentos,
       });
     }
     const userToken = Auth.generateToken(usuario);
     const userRefreshToken = Auth.generateRefreshToken(usuario);
     res.json({
-      mensaje: "Inicio de sesión exitoso",
+      message: "Inicio de sesión exitoso",
       token: userToken,
       refreshToken: userRefreshToken,
     });

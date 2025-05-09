@@ -34,7 +34,7 @@ const create = async (req, res) => {
   try {
     const dataCategoria = req.body;
     const createdId = await CategoriaServices.create(dataCategoria);
-    res.status(201).json({ mensaje: "Categoria creada", id: createdId });
+    res.status(201).json({ message: "Categoria creada", id: createdId });
   } catch (error) {
     console.log("Error in create categoria ");
     res.status(500).json({
@@ -55,7 +55,7 @@ const updateById = async (req, res) => {
     );
     res
       .status(201)
-      .json({ mensaje: "Categoria actualizada", updatedRows: updatedRows });
+      .json({ message: "Categoria actualizada", updatedRows: updatedRows });
   } catch (error) {
     console.log("Error in update categoria ");
     res.status(500).json({
@@ -72,7 +72,7 @@ const deleteById = async (req, res) => {
     const updatedRows = await CategoriaServices.deleteById(id_categoria);
     res
       .status(201)
-      .json({ mensaje: "Categoria eliminada", updatedRows: updatedRows });
+      .json({ message: "Categoria eliminada", updatedRows: updatedRows });
   } catch (error) {
     console.log("Error in delete categoria ");
     res.status(500).json({
