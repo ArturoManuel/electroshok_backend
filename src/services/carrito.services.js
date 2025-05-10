@@ -42,8 +42,8 @@ const deleteItem = async (id_item) => {
 
 const deleteCart = async (id_usuario) => {
   try {
-    const updatedRows = await CarritoItemModel.deleteCart(id_usuario);
-    return updatedRows;
+    const wasDeleted = await CarritoItemModel.deleteCart(id_usuario);
+    return wasDeleted;
   } catch (error) {
     console.log(error);
     throw error;

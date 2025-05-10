@@ -1,14 +1,15 @@
 import express from "express";
 import { CarritoController } from "../controllers/carrito.controller.js";
+import { authMiddleware } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.get("/user/:id", CarritoController.listByUser);
+router.get("/", authMiddleware(), CarritoController.listByUser);
 
-router.post("/", CarritoController.addItem);
-router.delete("/:id", CarritoController.deleteItem);
-router.put("/:id", CarritoController.updateAmount);
+router.post("/", authMiddleware(), CarritoController.addItem);
+router.delete("/:id", authMiddleware(), CarritoController.deleteItem);
+router.put("/:id", authMiddleware(), CarritoController.updateAmount);
 
-router.delete("/user", CarritoController.deleteCart);
+router.delete("/", authMiddleware(), CarritoController.deleteCart);
 
 export default router;

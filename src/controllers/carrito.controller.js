@@ -1,9 +1,9 @@
 import { CarritoServices } from "../services/carrito.services.js";
 
 const listByUser = async (req, res) => {
-  console.log("Sending cart by user with id: ", req.params.id);
+  console.log("Sending cart by user with id: ", req.user.id_usuario);
   try {
-    const id_usuario = req.params.id;
+    const id_usuario = req.user.id_usuario;
     const results = await CarritoServices.listByUser(id_usuario);
     res.json(results || []);
   } catch (error) {
@@ -18,9 +18,17 @@ const listByUser = async (req, res) => {
 const addItem = async (req, res) => {
   console.log("Adding item to cart", req.body);
   try {
-    const dataItem = req.body;
+    const item = req.body;
+    const id_usuario = req.user.id_usuario;
+    const dataItem = {
+      id_usuario: id_usuario,
+      id_producto: item.id_producto,
+      cantidad: item.cantidad,
+    };
     const id_item = await CarritoServices.addItem(dataItem);
-    return id_item;
+    res
+      .status(201)
+      .json({ message: "Agregado item al carrito", id_item: id_item });
   } catch (error) {
     console.log("Error in add item to cart");
     res.status(500).json({
@@ -34,9 +42,18 @@ const updateAmount = async (req, res) => {
   console.log("Updating item", req.body);
   try {
     const id_item = req.params.id;
-    const dataItem = req.body;
+    const item = req.body;
+    const id_usuario = req.user.id_usuario;
+    const dataItem = {
+      id_usuario: id_usuario,
+      id_producto: item.id_producto,
+      cantidad: item.cantidad,
+    };
     const updatedRows = await CarritoServices.updateAmount(id_item, dataItem);
-    return updatedRows;
+    res.json({
+      message: "Actualizado item del carrito",
+      updatedRows: updatedRows,
+    });
   } catch (error) {
     console.log("Error in update item amount");
     res.status(500).json({
@@ -51,7 +68,10 @@ const deleteItem = async (req, res) => {
   try {
     const id_item = req.params.id;
     const updatedRows = await CarritoServices.deleteItem(id_item);
-    return updatedRows;
+    res.json({
+      message: "Eliminado item del carrito",
+      updatedRows: updatedRows,
+    });
   } catch (error) {
     console.log("Error in delete item from cart");
     res.status(500).json({
@@ -62,11 +82,14 @@ const deleteItem = async (req, res) => {
 };
 
 const deleteCart = async (req, res) => {
-  console.log("Deleting cart from user ", req.params.id);
+  console.log("Deleting cart from user ", req.user.id_usuario);
   try {
-    const id_usuario = req.params.id;
-    const updatedRows = await CarritoServices.deleteCart(id_usuario);
-    return updatedRows;
+    const id_usuario = req.user.id_usuario;
+    const wasDeleted = await CarritoServices.deleteCart(id_usuario);
+    res.json({
+      message: "Eliminado carrito del usuario",
+      wasDeleted: wasDeleted,
+    });
   } catch (error) {
     console.log("Error in delete cart from user");
     res.status(500).json({

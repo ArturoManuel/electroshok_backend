@@ -53,7 +53,7 @@ export const connect = async function () {
 const listByUser = async (id_usuario) => {
   try {
     const results = await CarritoItem.findAll({
-      include: [Producto],
+      include: [Producto, Usuario],
       where: {
         id_usuario: id_usuario,
       },
@@ -84,7 +84,7 @@ const updateAmount = async (id_item, dataItem) => {
   try {
     const [updatedRows] = await CarritoItem.update(
       {
-        cantidad: dataItem,
+        cantidad: dataItem.cantidad,
       },
       {
         where: {
@@ -101,11 +101,12 @@ const updateAmount = async (id_item, dataItem) => {
 
 const deleteItem = async (id_item) => {
   try {
-    const [updatedRows] = await CarritoItem.destroy({
+    await CarritoItem.destroy({
       where: {
         id_item: id_item,
       },
     });
+    const updatedRows = 1; //Asumiendo que no hubo errores (Sequelize.destroy no devuelve el numero de updated rows)
     return updatedRows;
   } catch (error) {
     console.log(error);
@@ -115,12 +116,12 @@ const deleteItem = async (id_item) => {
 
 const deleteCart = async (id_usuario) => {
   try {
-    const [updatedRows] = await CarritoItem.destroy({
+    await CarritoItem.destroy({
       where: {
         id_usuario: id_usuario,
       },
     });
-    return updatedRows;
+    return true;
   } catch (error) {
     console.log(error);
     throw error;

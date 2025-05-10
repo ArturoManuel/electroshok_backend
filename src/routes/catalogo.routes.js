@@ -9,7 +9,7 @@ router.get("/:id", CatalogoController.getById);
 router.post("/", authMiddleware(), CatalogoController.create);
 router.put(
   "/:id",
-  // MiddlewareAuth.authMiddleware(["admin"]),
+  // authMiddleware(["admin"]),
   authMiddleware(),
   CatalogoController.updateById
 );
