@@ -57,7 +57,7 @@ Producto.belongsTo(Categoria, { foreignKey: "id_categoria" });
 
 export const connect = async function () {
   await orm.authenticate();
-  console.log("conexion establecida: usuario");
+  console.log("conexion establecida: producto");
 };
 
 const getAll = async () => {
@@ -102,7 +102,7 @@ const create = async (dataProducto) => {
       id_categoria: dataProducto.id_categoria,
     });
     console.log("Producto creado: ", producto);
-    return producto.id_producto;
+    return producto.toJSON().id_producto;
   } catch (error) {
     console.log(error);
     throw error;

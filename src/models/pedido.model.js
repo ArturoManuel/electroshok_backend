@@ -47,5 +47,5 @@ Pedido.belongsTo(Usuario, { foreignKey: "id_usuario" });
 
 export const connect = async function () {
   await orm.authenticate();
-  console.log("conexion establecida: usuario");
+  console.log("conexion establecida: pedido");
 };

@@ -22,8 +22,8 @@ const getById = async (id_producto) => {
 
 const create = async (dataProducto) => {
   try {
-    const producto = await ProductoModel.create(dataProducto);
-    return producto.id_producto;
+    const id_producto = await ProductoModel.create(dataProducto);
+    return id_producto;
   } catch (error) {
     console.log(error);
     throw error;

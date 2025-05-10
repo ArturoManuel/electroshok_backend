@@ -1,6 +1,5 @@
 import { DataTypes, Sequelize } from "sequelize";
 import orm from "../config/sequelize.js";
-import e from "cors";
 
 export const Usuario = orm.define(
   "usuario",
@@ -115,7 +114,7 @@ const create = async (dataUsuario) => {
       rol: dataUsuario.rol,
     });
     console.log("Usuario creado: ", usuario);
-    return usuario.id_usuario;
+    return usuario.toJSON().id_usuario;
   } catch (error) {
     console.log(error);
     throw error;

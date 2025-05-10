@@ -35,7 +35,7 @@ export const Categoria = orm.define(
 
 export const connect = async function () {
   await orm.authenticate();
-  console.log("conexion establecida: usuario");
+  console.log("conexion establecida: categoria");
 };
 
 const findAll = async () => {
@@ -74,7 +74,7 @@ const create = async (dataCategoria) => {
       tipo_categoria: dataCategoria.tipo_categoria,
     });
     console.log("Categoria creada: ", categoria);
-    return categoria.id_categoria;
+    return categoria.toJSON().id_categoria;
   } catch (error) {
     console.log(error);
     throw error;

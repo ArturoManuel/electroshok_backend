@@ -51,5 +51,5 @@ DetallePedido.belongsTo(Producto, { foreignKey: "id_producto" });
 
 export const connect = async function () {
   await orm.authenticate();
-  console.log("conexion establecida: usuario");
+  console.log("conexion establecida: detalle pedido");
 };
