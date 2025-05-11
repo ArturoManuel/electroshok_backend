@@ -1,13 +1,16 @@
 import express from "express";
-import * as PedidoController from "../controllers/pedido.controller.js";
+import { PedidoController } from "../controllers/pedido.controller.js";
+import { authMiddleware } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.get("/", PedidoController.getAll);
-router.get("/:id", PedidoController.getById);
-router.get("/:id/detail", PedidoController.getDetails);
-router.post("/", PedidoController.create);
-router.put("/:id", PedidoController.updateById);
-router.delete("/:id", PedidoController.deleteById);
+router.get("/", authMiddleware(["administrador"]), PedidoController.getAll);
+router.post("/", authMiddleware(), PedidoController.create);
+
+router.get("/user/", authMiddleware(), PedidoController.getAllByUserId);
+
+router.get("/:id", authMiddleware(), PedidoController.getById);
+router.get("/:id/detail", authMiddleware(), PedidoController.getDetails);
+router.put("/:id", authMiddleware(), PedidoController.updateState);
 
 export default router;

@@ -49,3 +49,97 @@ export const connect = async function () {
   await orm.authenticate();
   console.log("conexion establecida: pedido");
 };
+
+const create = async (id_usuario, total) => {
+  try {
+    const pedido = await Pedido.create({
+      id_usuario: id_usuario,
+      total: total,
+    });
+    const id_pedido = pedido.toJSON().id_pedido;
+    return id_pedido;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const getAll = async () => {
+  try {
+    const results = await Pedido.findAll({
+      order: ["fecha_pedido"],
+    });
+    return results.map((i) => i.toJSON());
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const getDetails = async (id_pedido) => {
+  try {
+    const details = await DetallePedidoModel.getDetails(id_pedido);
+    return details;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const getById = async (id_pedido) => {
+  try {
+    const results = await Pedido.findAll({
+      order: ["fecha_pedido"],
+      where: {
+        id_pedido: id_pedido,
+      },
+    });
+    return results.map((i) => i.toJSON());
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const updateState = async (id_pedido, newState) => {
+  try {
+    const [updatedRows] = await Pedido.update(
+      {
+        estado: newState,
+      },
+      {
+        where: {
+          id_pedido: id_pedido,
+        },
+      }
+    );
+    return updatedRows;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const getAllByUserId = async (id_usuario) => {
+  try {
+    const results = await Pedido.findAll({
+      order: ["fecha_pedido"],
+      where: {
+        id_usuario: id_usuario,
+      },
+    });
+    return results.map((i) => i.toJSON());
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const PedidoModel = {
+  create,
+  getAll,
+  getDetails,
+  getById,
+  updateState,
+  getAllByUserId,
+};

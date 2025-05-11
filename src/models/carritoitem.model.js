@@ -53,7 +53,7 @@ export const connect = async function () {
 const listByUser = async (id_usuario) => {
   try {
     const results = await CarritoItem.findAll({
-      include: [Producto, Usuario],
+      include: [Producto],
       where: {
         id_usuario: id_usuario,
       },

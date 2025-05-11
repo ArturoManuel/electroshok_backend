@@ -1,145 +1,88 @@
-import pool from "../config/db.js";
+import { CarritoItemModel } from "../models/carritoitem.model.js";
+import { DetallePedidoModel } from "../models/detallepedido.model.js";
+import { PedidoModel } from "../models/pedido.model.js";
 
-export const getAll = () => {
-  const query = `
-            SELECT id_pedido, fecha_pedido, id_usuario, total, estado, fecha_creacion
-            FROM Pedido
-            ORDER BY fecha_pedido DESC`;
-
-  return new Promise((resolve, reject) => {
-    pool.query(query, (error, results, fields) => {
-      if (error) reject(error);
-      else resolve(results);
-    });
-  });
+const getAll = async () => {
+  try {
+    const results = await PedidoModel.getAll();
+    return results;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
-export const getById = (id_pedido) => {
-  const query = `
-            SELECT id_pedido, fecha_pedido, total, estado
-            FROM Pedido
-            WHERE id_pedido = ?`;
-
-  return new Promise((resolve, reject) => {
-    pool.query(query, [id_pedido], (error, results, fields) => {
-      if (error) reject(error);
-      else resolve(results);
-    });
-  });
+const getById = async (id_pedido) => {
+  try {
+    const results = await PedidoModel.getById(id_pedido);
+    return results;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
-export const getDetails = (id_pedido) => {
-  const query = `
-            SELECT dp.id_detalle, p.nombre, dp.cantidad, dp.precio_unitario,
-                   (dp.cantidad * dp.precio_unitario) AS subtotal
-            FROM DetallePedido dp
-            JOIN Producto p ON dp.id_producto = p.id_producto
-            WHERE dp.id_pedido = ?`;
-
-  return new Promise((resolve, reject) => {
-    pool.query(query, [id_pedido], (error, results, fields) => {
-      if (error) reject(error);
-      else resolve(results);
-    });
-  });
+const getAllByUserId = async (id_usuario) => {
+  try {
+    const results = await PedidoModel.getAllByUserId(id_usuario);
+    return results;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
-export const create = (id_usuario, items) => {
-  const queryPedido = `
-      INSERT INTO Pedido (id_usuario, total) VALUES (?, ?)
-  `;
-  const queryDetalles = `
-      INSERT INTO DetallePedido (id_pedido, id_producto, cantidad, precio_unitario)
-      VALUES ?
-  `;
-  const total = items.reduce(
-    (sum, item) => sum + item.precio * item.cantidad,
-    0
-  );
-  const valuesPedido = [id_usuario, total];
-
-  return new Promise((resolve, reject) => {
-    pool.query(queryPedido, valuesPedido, (error, resultsPedido, fields) => {
-      if (error) reject(error);
-      else {
-        const idPedido = resultsPedido.insertId;
-
-        const valuesDetalles = items.map((item) => [
-          idPedido,
-          item.id_producto,
-          item.cantidad,
-          item.precio,
-        ]);
-
-        pool.query(
-          queryDetalles,
-          valuesDetalles,
-          (err, resultsDetails, fields) => {
-            if (err) reject(error);
-            else resolve(resultsDetails);
-          }
-        );
-      }
-    });
-  });
+const getDetails = async (id_pedido) => {
+  try {
+    const details = await DetallePedidoModel.getDetails(id_pedido);
+    return details;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
-export const updateById = (id_pedido, items) => {
-  const queryPedido = `
-      UPDATE Pedido SET total=? WHERE id_pedido=?
-  `;
-  const queryDetallesDelete = `
-      DELETE FROM DetallePedido WHERE id_pedido=?
-  `;
-  const queryDetallesInsert = `
-      INSERT INTO DetallePedido (id_pedido, id_producto, cantidad, precio_unitario)
-      VALUES ?
-  `;
-  const total = items.reduce(
-    (sum, item) => sum + item.precio * item.cantidad,
-    0
-  );
-  const valuesPedido = [total, id_pedido];
-
-  return new Promise((resolve, reject) => {
-    pool.query(queryPedido, valuesPedido, (error, resultsPedido, fields) => {
-      if (error) reject(error);
-      else {
-        pool.query(
-          queryDetallesDelete,
-          [id_pedido],
-          (error, results, fields) => {
-            if (error) reject(error);
-            else {
-              const valuesDetalles = items.map((item) => [
-                idPedido,
-                item.id_producto,
-                item.cantidad,
-                item.precio,
-              ]);
-              pool.query(
-                queryDetallesInsert,
-                valuesDetalles,
-                (err, resultsDetailsInsert, fields) => {
-                  if (err) reject(error);
-                  else resolve(resultsDetailsInsert);
-                }
-              );
-            }
-          }
-        );
-      }
-    });
-  });
+const create = async (id_usuario) => {
+  try {
+    const carrito = await CarritoItemModel.listByUser(id_usuario);
+    if (carrito.length === 0) {
+      throw new Error("No se puede crear el pedido: El carrito esta vacio");
+    }
+    const total = carrito.reduce(
+      (acc, item) => acc + item.producto.precio * item.cantidad,
+      0
+    );
+    const id_pedido = await PedidoModel.create(id_usuario, total);
+    const details = await DetallePedidoModel.createInBulk(id_pedido, carrito);
+    if (details.length === 0) {
+      throw new Error("Error al crear detalle pedido");
+    }
+    const deletedCart = await CarritoItemModel.deleteCart(id_usuario);
+    if (!deletedCart) {
+      throw new Error("Error al vaciar carrito");
+    }
+    return id_pedido;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
-export const deleteById = (id_pedido) => {
-  const query = `UPDATE Pedido SET estado='cancelado' WHERE id_pedido=?`;
+const updateState = async (id_pedido, newState) => {
+  try {
+    const updatedRows = await PedidoModel.updateState(id_pedido, newState);
+    return updatedRows;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
-  return new Promise((resolve, reject) => {
-    pool.query(query, [id_pedido], (error, results, fields) => {
-      if (error) reject(error);
-      else resolve(results);
-    });
-  });
+export const PedidoServices = {
+  create,
+  getAll,
+  getDetails,
+  getById,
+  updateState,
+  getAllByUserId,
 };

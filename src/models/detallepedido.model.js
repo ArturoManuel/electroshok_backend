@@ -53,3 +53,41 @@ export const connect = async function () {
   await orm.authenticate();
   console.log("conexion establecida: detalle pedido");
 };
+
+const createInBulk = async (id_pedido, dataDetalles) => {
+  try {
+    const details = await DetallePedido.bulkCreate(
+      dataDetalles.map((item) => ({
+        id_pedido: id_pedido,
+        id_producto: item.id_producto,
+        cantidad: item.cantidad,
+        precio_unitario: item.producto.precio,
+      }))
+    );
+    console.log(details);
+    return details.map((i) => i.toJSON());
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const getDetails = async (id_pedido) => {
+  try {
+    const results = await DetallePedido.findAll({
+      include: [Producto],
+      where: {
+        id_pedido: id_pedido,
+      },
+    });
+    return results.map((i) => i.toJSON());
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const DetallePedidoModel = {
+  createInBulk,
+  getDetails,
+};
