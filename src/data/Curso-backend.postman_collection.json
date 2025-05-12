@@ -888,6 +888,100 @@
               "response": []
             }
           ]
+        },
+        {
+          "name": "Archivos",
+          "item": [
+            {
+              "name": "Upload product Image",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "archivo",
+                      "type": "file",
+                      "src": "6tQSuHBmG/samsungtv.jpg"
+                    },
+                    {
+                      "key": "id_producto",
+                      "value": "1",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:4001/api/v1/catalogo/uploadImage",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "4001",
+                  "path": ["api", "v1", "catalogo", "uploadImage"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Download product image",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "archivo",
+                      "type": "file",
+                      "src": "6tQSuHBmG/samsungtv.jpg"
+                    },
+                    {
+                      "key": "id_producto",
+                      "value": "1",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:4001/api/v1/catalogo/downloadImage/:id",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "4001",
+                  "path": ["api", "v1", "catalogo", "downloadImage", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
         }
       ]
     }

@@ -1,4 +1,6 @@
+import { uploadProductImage } from "../config/multer.js";
 import { ProductoModel } from "../models/producto.model.js";
+import { getArchivo } from "../utils/archivos.js";
 
 const getAll = async () => {
   try {
@@ -53,10 +55,33 @@ const deleteById = async (id_producto) => {
   }
 };
 
+const uploadImage = async (req, res) => {
+  try {
+    await uploadProductImage(req, res);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const downloadImage = async (id_producto) => {
+  try {
+    const results = await ProductoModel.getById(id_producto);
+    if (results.length === 0) throw new Error("Producto no encontrado");
+    const product = results[0];
+    return getArchivo(product.url_imagen);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export const CatalogoServices = {
   getAll,
   getById,
   create,
   updateById,
   deleteById,
+  uploadImage,
+  downloadImage,
 };

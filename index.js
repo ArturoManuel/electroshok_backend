@@ -17,6 +17,12 @@ const corsOptions = {
 const app = express();
 
 app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+    type: "application/x-www-form-urlencoded",
+  })
+);
 app.use(cors(corsOptions));
 
 app.use("/api/v1", api);

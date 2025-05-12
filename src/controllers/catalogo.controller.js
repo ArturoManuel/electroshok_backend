@@ -1,3 +1,4 @@
+import fs from "fs";
 import { CatalogoServices } from "../services/catalogo.services.js";
 
 const getAll = async (req, res) => {
@@ -82,10 +83,46 @@ const deleteById = async (req, res) => {
   }
 };
 
+const uploadImage = async (req, res) => {
+  try {
+    await CatalogoServices.uploadImage(req, res);
+  } catch (error) {
+    console.log("Error in upload product image");
+    res.status(500).json({
+      message: "Error al actualizar imagen de producto",
+      error: error.toString(),
+    });
+  }
+};
+
+const downloadImage = async (req, res) => {
+  try {
+    const id_producto = req.params.id;
+    const fileUri = await CatalogoServices.downloadImage(id_producto);
+    if (fs.existsSync(fileUri)) {
+      res.download(fileUri, "imagen.jpg", (err) => {
+        if (err) {
+          throw err;
+        }
+      });
+    } else {
+      throw new Error("Archivo no encontrado");
+    }
+  } catch (error) {
+    console.log("Error in download product image");
+    res.status(500).json({
+      message: "Error al descargar imagen de producto",
+      error: error.toString(),
+    });
+  }
+};
+
 export const CatalogoController = {
   getAll,
   getById,
   create,
   updateById,
   deleteById,
+  uploadImage,
+  downloadImage,
 };

@@ -152,10 +152,28 @@ const deleteById = async (id_producto) => {
   }
 };
 
+const updateImage = async (id_producto, filename) => {
+  try {
+    const [updatedRows] = await Producto.update(
+      {
+        url_imagen: filename,
+      },
+      {
+        where: { id_producto: id_producto },
+      }
+    );
+    return updatedRows;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export const ProductoModel = {
   getAll,
   getById,
   create,
   updateById,
   deleteById,
+  updateImage,
 };
