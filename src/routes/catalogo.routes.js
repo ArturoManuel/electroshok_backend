@@ -7,7 +7,11 @@ const router = express.Router();
 router.get("/", CatalogoController.getAll);
 router.post("/", authMiddleware(), CatalogoController.create);
 
-router.post("/uploadImage", authMiddleware(), CatalogoController.uploadImage);
+router.post(
+  "/uploadImage",
+  authMiddleware(["administrador"]),
+  CatalogoController.uploadImage
+);
 router.get(
   "/downloadImage/:id",
   authMiddleware(),
