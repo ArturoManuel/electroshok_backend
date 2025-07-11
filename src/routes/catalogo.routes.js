@@ -5,21 +5,25 @@ import { CatalogoController } from "../controllers/catalogo.controller.js";
 const router = express.Router();
 
 router.get("/", CatalogoController.getAll);
-router.post("/", authMiddleware(), CatalogoController.create);
+router.post("/", authMiddleware(["administrador"]), CatalogoController.create);
 
 router.post(
   "/uploadImage",
   authMiddleware(["administrador"]),
   CatalogoController.uploadImage
 );
-router.get(
-  "/downloadImage/:id",
-  authMiddleware(),
-  CatalogoController.downloadImage
-);
+router.get("/downloadImage/:id", CatalogoController.downloadImage);
 
 router.get("/:id", CatalogoController.getById);
-router.put("/:id", authMiddleware(), CatalogoController.updateById);
-router.delete("/:id", authMiddleware(), CatalogoController.deleteById);
+router.put(
+  "/:id",
+  authMiddleware(["administrador"]),
+  CatalogoController.updateById
+);
+router.delete(
+  "/:id",
+  authMiddleware(["administrador"]),
+  CatalogoController.deleteById
+);
 
 export default router;

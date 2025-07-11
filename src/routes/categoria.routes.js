@@ -5,10 +5,18 @@ import { authMiddleware } from "../middleware/auth.middleware.js";
 const router = express.Router();
 
 router.get("/", CategoriaController.getAll);
-router.post("/", authMiddleware(), CategoriaController.create);
+router.post("/", authMiddleware(["administrador"]), CategoriaController.create);
 
 router.get("/:id", CategoriaController.getById);
-router.put("/:id", authMiddleware(), CategoriaController.updateById);
-router.delete("/:id", authMiddleware(), CategoriaController.deleteById);
+router.put(
+  "/:id",
+  authMiddleware(["administrador"]),
+  CategoriaController.updateById
+);
+router.delete(
+  "/:id",
+  authMiddleware(["administrador"]),
+  CategoriaController.deleteById
+);
 
 export default router;

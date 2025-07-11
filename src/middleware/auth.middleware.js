@@ -2,6 +2,8 @@ import { Auth } from "../config/auth.js";
 
 export const authMiddleware = function (roles = []) {
   return (req, res, next) => {
+    // return true; // Probando desactivación del middleware para pruebas
+
     const authHeader = req.headers.authorization;
     console.log("authHeader:" + authHeader);
     console.log("roles:" + roles);

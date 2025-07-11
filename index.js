@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 
 import api from "./routes.js";
+import helmet from "helmet";
 
 const FRONTEND_URL = "http://localhost:4001";
 
@@ -15,6 +16,9 @@ const corsOptions = {
 };
 
 const app = express();
+
+// Middleware de seguridad - Helmet
+app.use(helmet());
 
 app.use(bodyParser.json());
 app.use(
@@ -32,3 +36,5 @@ const PUERTO = "4001";
 app.listen(PUERTO, () => {
   console.log(`Listening on ${PUERTO}`);
 });
+
+export default app; // Export the app for testing purposes

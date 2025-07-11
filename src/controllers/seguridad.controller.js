@@ -112,9 +112,16 @@ export const unblockUser = async (req, res) => {
   }
 };
 
+export const testHelmet = (req, res) => {
+  res.status(200).json({
+    message: "Helmet is working correctly",
+  });
+};
+
 export const SeguridadController = {
   login,
   refreshToken,
   blockUser,
   unblockUser,
+  testHelmet,
 };
