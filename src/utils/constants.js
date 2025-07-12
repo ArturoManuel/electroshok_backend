@@ -8,7 +8,7 @@ export const JWT_REFRESH_EXPIRES = "1d";
 export const DATABASE_HOST = process.env.DATABASE_HOST || "localhost";
 export const DATABASE_USER = process.env.DATABASE_USER || "root";
 export const DATABASE_PASSWORD =
-  process.env.DATABASE_PASSWORD || "paltita99sql";
+  process.env.DATABASE_PASSWORD || "dataabse_password";
 export const DATABASE_NAME = process.env.DATABASE_NAME || "electroshok";
 export const DATABASE_CONNECTION_LIMIT =
   process.env.DATABASE_CONNECTION_LIMIT || 2;
