@@ -2,6 +2,7 @@ import request from "supertest";
 import app from "../index.js";
 
 describe("Usuario Controller", () => {
+  console.log("Usuario Controller");
   describe("GET /api/v1/usuario", () => {
     it("debería retornar una lista de usuario", async () => {
       const res = await request(app).get("/api/v1/usuario");
