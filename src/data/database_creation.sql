@@ -3,79 +3,75 @@ USE electroshok;
 
 -- Tabla: Categoría
 CREATE TABLE Categoria (
-                           id_categoria INT PRIMARY KEY AUTO_INCREMENT,
-                           nombre_categoria VARCHAR(100) NOT NULL,
-                           tipo_categoria VARCHAR(100),
-                           fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                           esta_activo BOOLEAN DEFAULT TRUE
+    id_categoria INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_categoria VARCHAR(100) NOT NULL,
+    tipo_categoria VARCHAR(100),
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    esta_activo BOOLEAN DEFAULT TRUE
 );
 
 -- Tabla: Usuario
 CREATE TABLE Usuario (
-                         id_usuario INT PRIMARY KEY AUTO_INCREMENT,
-                         nombre VARCHAR(100) NOT NULL,
-                         correo_electronico VARCHAR(100) NOT NULL UNIQUE,
-                         contrasena VARCHAR(255) NOT NULL,
-                         rol ENUM('cliente', 'administrador') DEFAULT 'cliente',
-                         fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                         esta_activo BOOLEAN DEFAULT TRUE,
-                         intentos INT NOT NULL DEFAULT 0
+    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    correo_electronico VARCHAR(100) NOT NULL UNIQUE,
+    contrasena VARCHAR(255) NOT NULL,
+    rol ENUM('cliente', 'administrador') DEFAULT 'cliente',
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    esta_activo BOOLEAN DEFAULT TRUE,
+    intentos INT NOT NULL DEFAULT 0
 );
 
 -- Tabla: Producto
 CREATE TABLE Producto (
-                          id_producto INT PRIMARY KEY AUTO_INCREMENT,
-                          nombre VARCHAR(150) NOT NULL,
-                          descripcion TEXT,
-                          precio DECIMAL(10, 2) NOT NULL,
-                          stock INT NOT NULL,
-                          url_imagen VARCHAR(255),
-                          id_categoria INT,
-                          fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                          esta_activo BOOLEAN DEFAULT TRUE,
-                          FOREIGN KEY (id_categoria) REFERENCES Categoria(id_categoria)
+    id_producto INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(150) NOT NULL,
+    descripcion TEXT,
+    precio DECIMAL(10, 2) NOT NULL,
+    stock INT NOT NULL,
+    url_imagen VARCHAR(255),
+    id_categoria INT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    esta_activo BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (id_categoria) REFERENCES Categoria(id_categoria)
 );
 
 -- Tabla: CarritoItem
 CREATE TABLE CarritoItem (
-                             id_item INT PRIMARY KEY AUTO_INCREMENT,
-                             id_usuario INT NOT NULL,
-                             id_producto INT NOT NULL,
-                             cantidad INT NOT NULL,
-                             FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario),
-                             FOREIGN KEY (id_producto) REFERENCES Producto(id_producto)
+    id_item INT PRIMARY KEY AUTO_INCREMENT,
+    id_usuario INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario),
+    FOREIGN KEY (id_producto) REFERENCES Producto(id_producto)
 );
 
 -- Tabla: Pedido
 CREATE TABLE Pedido (
-                        id_pedido INT PRIMARY KEY AUTO_INCREMENT,
-                        id_usuario INT NOT NULL,
-                        total DECIMAL(10, 2) NOT NULL,
-                        estado ENUM('pendiente', 'pagado', 'cancelado') DEFAULT 'pendiente',
-                        fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
+    id_pedido INT PRIMARY KEY AUTO_INCREMENT,
+    id_usuario INT NOT NULL,
+    total DECIMAL(10, 2) NOT NULL,
+    estado ENUM('pendiente', 'pagado', 'cancelado') DEFAULT 'pendiente',
+    fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
 );
 
 -- Tabla: DetallePedido
 CREATE TABLE DetallePedido (
-                               id_detalle INT PRIMARY KEY AUTO_INCREMENT,
-                               id_pedido INT NOT NULL,
-                               id_producto INT NOT NULL,
-                               cantidad INT NOT NULL,
-                               precio_unitario DECIMAL(10,2) NOT NULL,
-                               FOREIGN KEY (id_pedido) REFERENCES Pedido(id_pedido),
-                               FOREIGN KEY (id_producto) REFERENCES Producto(id_producto)
+    id_detalle INT PRIMARY KEY AUTO_INCREMENT,
+    id_pedido INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (id_pedido) REFERENCES Pedido(id_pedido),
+    FOREIGN KEY (id_producto) REFERENCES Producto(id_producto)
 );
 
+-- INSERTS
 
-
--- Inserts:
-
--- categoria
-INSERT INTO `electroshok`.`categoria`
-(`id_categoria`, `nombre_categoria`, `tipo_categoria`, `fecha_creacion`, `esta_activa`)
-VALUES
+-- Categorías
+INSERT INTO Categoria (id_categoria, nombre_categoria, tipo_categoria, fecha_creacion, esta_activo) VALUES
 (1, 'Televisores', 'Electrodoméstico', '2025-05-01 10:00:00', 1),
 (2, 'Computadoras', 'Tecnología', '2025-05-01 10:00:00', 1),
 (3, 'Smartphones', 'Tecnología', '2025-05-01 10:00:00', 1),
@@ -87,11 +83,8 @@ VALUES
 (9, 'Consolas', 'Videojuegos', '2025-05-01 10:00:00', 1),
 (10, 'Iluminación', 'Hogar', '2025-05-01 10:00:00', 1);
 
-
--- producto
-INSERT INTO `electroshok`.`producto`
-(`id_producto`, `nombre`, `descripcion`, `precio`, `stock`, `url_imagen`, `id_categoria`, `fecha_creacion`, `esta_activo`)
-VALUES
+-- Productos
+INSERT INTO Producto (id_producto, nombre, descripcion, precio, stock, url_imagen, id_categoria, fecha_creacion, esta_activo) VALUES
 (1, 'Smart TV Samsung 55"', 'Televisor UHD 4K con Smart Hub y HDR10+', 799.99, 15, 'https://example.com/img/samsung55.jpg', 1, '2025-05-02 09:00:00', 1),
 (2, 'Laptop Dell Inspiron', 'Intel Core i5, 16GB RAM, 512GB SSD', 899.00, 10, 'https://example.com/img/dell_inspiron.jpg', 2, '2025-05-02 09:05:00', 1),
 (3, 'iPhone 14 Pro', 'Apple iPhone 14 Pro de 128GB, color negro', 1199.99, 20, 'https://example.com/img/iphone14pro.jpg', 3, '2025-05-02 09:10:00', 1),

@@ -5,7 +5,7 @@ import {
   DATABASE_NAME,
   DATABASE_PASSWORD,
   DATABASE_USER,
-} from "../utils/constants";
+} from "../utils/constants.js";
 
 // Configuración de la conexión
 const orm = new Sequelize(DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD, {
