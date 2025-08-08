@@ -2,39 +2,31 @@ import "dotenv/config";
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-
-import api from "./routes.js";
 import helmet from "helmet";
 
-const FRONTEND_URL = "http://localhost:4001";
+import api from "./routes.js";
+
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+const PUERTO = Number(process.env.PORT || 4001);
 
 const corsOptions = {
-  origin: FRONTEND_URL,
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
+    origin: FRONTEND_URL,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
 };
 
 const app = express();
 
-// Middleware de seguridad - Helmet
 app.use(helmet());
-
-app.use(bodyParser.json());
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-    type: "application/x-www-form-urlencoded",
-  })
-);
 app.use(cors(corsOptions));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api/v1", api);
 
-const PUERTO = "4001";
-
 app.listen(PUERTO, () => {
-  console.log(`Listening on ${PUERTO}`);
+    console.log(`Listening on ${PUERTO}`);
 });
 
-export default app; // Export the app for testing purposes
+export default app;
