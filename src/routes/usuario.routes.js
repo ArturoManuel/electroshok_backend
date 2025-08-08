@@ -5,7 +5,7 @@ import { authMiddleware } from "../middleware/auth.middleware.js";
 const router = express.Router();
 
 router.get("/", authMiddleware(["administrador"]), UsuarioController.getAll);
-router.post("/", authMiddleware(["administrador"]), UsuarioController.create);
+router.post("/", UsuarioController.create);
 
 router.get(
   "/:id",
